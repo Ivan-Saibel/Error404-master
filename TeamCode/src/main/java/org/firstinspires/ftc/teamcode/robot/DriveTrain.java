@@ -5,6 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 
 /***
  * Поля:
@@ -24,6 +30,7 @@ public class DriveTrain {
     DcMotor bl, fl, fr, br;
     HardwareMap hwd;
 
+    double k = 1;
     public static double kP = 0.04;
     public static double TPR = 1440;
 
@@ -141,5 +148,27 @@ public class DriveTrain {
 
 
     }
+    public void followDirection_mecanumDrive (double x, double y, double t, boolean isSlow, boolean isSlower) {
+        if (Math.abs(t) < 0.05) t = 0;
+        double p1 = -x + y - t;
+        double p2 = x + y + -t;
+        double p3 = -x + y + t;
+        double p4 = x + y + t;
+        double max = Math.max(1.0, Math.abs(p1));
+        max = Math.max(max, Math.abs(p2));
+        max = Math.max(max, Math.abs(p3));
+        max = Math.max(max, Math.abs(p4));
+        p1 /= max;
+        p2 /= max;
+        p3 /= max;
+        p4 /= max;
 
+        if (isSlow) {
+            k = 0.6;
+        }
+        if (isSlower) {
+            k = 0.3;
+        }
+        setPower(p1, p2, p3, p4, k);
+    }
 }

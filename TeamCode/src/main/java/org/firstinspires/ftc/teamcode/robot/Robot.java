@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.OpenCV.AprilTagAutonomousInitDetection;
  * - Комплекосное несколькими модулями
  * - Цикл управлемого периода
  */
-public class Robot {
+public class    Robot {
     BNO055IMU imu;
     public DriveTrain dr;
     HardwareMap hwd;
@@ -37,6 +37,7 @@ public class Robot {
     LinearOpMode li;
     Elevator elv;
     public Claw claw;
+    public Plane plane;
     public VoltageSensor voltageSensor;
 
     public AprilTagAutonomousInitDetection cam;
@@ -71,6 +72,7 @@ public class Robot {
         dr = new DriveTrain(hwd, this);
         elv = new Elevator(hwd, this);
         claw = new Claw(hwd, this);
+        plane = new Plane(hwd, this);
 
 //        cam = new AprilTagAutonomousInitDetection(tele);
 //        cam.cameraInit(hwd);
@@ -87,10 +89,11 @@ public class Robot {
 
     public void teleLoop() throws InterruptedException {
         while (li.opModeIsActive()) {
-            dr.followDirection(gamepad1.left_stick_x, gamepad1.left_stick_y,
-                    -gamepad1.right_trigger + gamepad1.left_trigger, gamepad1.a, gamepad1.b);
+            dr.followDirection_mecanumDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x,
+                    gamepad1.right_trigger - gamepad1.left_trigger, gamepad1.a, gamepad1.b);
             elv.EvevatorMove(-gamepad2.left_stick_y);
             claw.ClawMove(gamepad1.right_bumper);
+            plane.PlaneMove(gamepad1.x);
 //            tele.addData("encoder", dr.fr.getCurrentPosition());
             tele.update();
 

@@ -7,38 +7,33 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //@Config
-public class Claw {
+public class Plane {
     Robot R;
-    Servo clawA, clawB;
+    Servo PlaneSer;
     HardwareMap hwd;
 
-    public static double closeA = 0.2;
+    public static double closeA = 0;
     public static double openA = 1;
     public static double closeB = 1;
-    public static double openB = 0.2;
+    public static double openB = 0.4;
 
-    public Claw(HardwareMap hwd, Robot R) {
+    public Plane(HardwareMap hwd, Robot R) {
         this.R = R;
         this.hwd = hwd;
-        clawA = hwd.get(Servo.class, "clawA");
-        clawB = hwd.get(Servo.class, "clawB");
+        PlaneSer = hwd.get(Servo.class, "PS");
     }
 
-
-
     public void close() {
-        clawA.setPosition(closeA);
-        clawB.setPosition(closeB);
+        PlaneSer.setPosition(0);
     }
 
     public void open() {
-        clawA.setPosition(openA);
-        clawB.setPosition(openB);
+        PlaneSer.setPosition(1);
     }
 
-    boolean flag = true;
-    public void ClawMove(boolean position1) throws InterruptedException {
-        if (position1) {
+    boolean flag = false;
+    public void PlaneMove(boolean position12) throws InterruptedException {
+        if (position12) {
             flag = !flag;
             sleep(200);
         }
